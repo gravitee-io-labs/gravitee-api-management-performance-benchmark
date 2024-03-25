@@ -1,0 +1,12 @@
+nodeSelector:
+  tier: control-plane
+admin:
+  user: "admin"
+  password: "admin"
+datasources:
+  secretName: datasource-secret
+dashboardsProvider:
+  enabled: true
+dashboardsConfigMaps:
+  - configMapName: k6-prometheus-dashboard
+    fileName: k6-prometheus-dashboard.json
