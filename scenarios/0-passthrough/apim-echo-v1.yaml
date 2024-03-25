@@ -1,0 +1,20 @@
+apiVersion: gravitee.io/v1alpha1
+kind: ApiDefinition
+metadata:
+  name: echo-v1
+spec:
+  name: "Echo"
+  version: "1.0"
+  description: "Echo API"
+  plans:
+    - name: "Open"
+      description: "Open Keyless Plan"
+      security: "KEY_LESS"
+  proxy:
+    virtual_hosts:
+      - path: "/echo"
+    groups:
+      - endpoints:
+          - name: "Default"
+            target: "https://api.gravitee.io/echo"
+  local: true
