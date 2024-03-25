@@ -1,13 +1,13 @@
 apiVersion: k6.io/v1alpha1
 kind: TestRun
 metadata:
-  name: k6-sample
+  name: apim-1-mock
 spec:
   parallelism: 1
   # separate: true
   script:
     configMap:
-      name: 0-passthrough
+      name: 1-mock
       file: test.js
   arguments: --out experimental-prometheus-rw
   runner:
