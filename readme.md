@@ -29,7 +29,7 @@ To perform these tests yourself, you will need :
 
 Customise the cluster by providing the `gravitee-apim-perf-test-cluster.yaml` file :
 
-[gravitee-apim-perf-test-cluster.yaml](./kind/gravitee-apim-perf-test-cluster.yaml#L1-L27)
+https://github.com/gravitee-io-labs/gravitee-api-management-performance-benchmark/blob/80aeedb180b0d0d02b3533cf7a426eb9ad1d5ddf/kind/gravitee-apim-perf-test-cluster.yaml#L1-L27
 
 ```sh
 kind create cluster --config kind/gravitee-apim-perf-test-cluster.yaml
@@ -66,7 +66,7 @@ helm repo update graviteeio
 
 Customise the installation by providong the `values.yaml` file :
 
-[values.yaml](./gio-apim/values.yaml#L1-L31)
+https://github.com/gravitee-io-labs/gravitee-api-management-performance-benchmark/blob/80aeedb180b0d0d02b3533cf7a426eb9ad1d5ddf/gio-apim/values.yaml#L1-L31
 
 ```sh
 helm install apim -f gio-apim/values.yaml graviteeio/apim --create-namespace --namespace gio-apim
@@ -116,7 +116,7 @@ helm repo update bitnami
 
 Customise the installation by providong the `values.yaml` file :
 
-[values.yaml](./prometheus/values.yaml#L1-L4)
+https://github.com/gravitee-io-labs/gravitee-api-management-performance-benchmark/blob/80aeedb180b0d0d02b3533cf7a426eb9ad1d5ddf/prometheus/values.yaml#L1-L4
 
 ```sh
 helm install prometheus -f prometheus/values.yaml bitnami/kube-prometheus --create-namespace --namespace prometheus
@@ -133,6 +133,10 @@ kubectl create configmap k6-prometheus-dashboard --from-file=./grafana/k6-promet
 ```
 
 2. Install Grafana
+
+Customise the installation by providong the `values.yaml` file :
+
+https://github.com/gravitee-io-labs/gravitee-api-management-performance-benchmark/blob/80aeedb180b0d0d02b3533cf7a426eb9ad1d5ddf/grafana/values.yaml#L1-L12
 
 ```sh
 helm install grafana -f grafana/values.yaml bitnami/grafana --create-namespace --namespace grafana
