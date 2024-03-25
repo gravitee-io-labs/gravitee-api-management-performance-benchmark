@@ -1,7 +1,7 @@
 apiVersion: k6.io/v1alpha1
 kind: TestRun
 metadata:
-  name: k6-sample
+  name: apim-0-passthrough
 spec:
   parallelism: 1
   # separate: true
