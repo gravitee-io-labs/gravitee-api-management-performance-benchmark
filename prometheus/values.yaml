@@ -1,0 +1,4 @@
+prometheus:
+  scrapeInterval: "30s"
+  evaluationInterval: "30s"
+  enableRemoteWriteReceiver: true
