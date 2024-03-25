@@ -1,0 +1,32 @@
+apiVersion: gravitee.io/v1alpha1
+kind: ApiDefinition
+metadata:
+  name: mock-v1
+spec:
+  name: "Mock"
+  version: "1.0"
+  description: "Mock API"
+  plans:
+    - name: "Open"
+      description: "Open Keyless Plan"
+      security: "KEY_LESS"
+      flows:
+        - name: Mock all requests
+          enabled: true
+          pre:
+            - name: Mock
+              policy: mock
+              enabled: true
+              description: Mock
+              configuration:
+                status: '200'
+                headers: []
+                content: Hello World  
+  proxy:
+    virtual_hosts:
+      - path: "/mock"
+    groups:
+      - endpoints:
+          - name: "Default"
+            target: "https://unused.com"
+  local: true
