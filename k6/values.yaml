@@ -1,0 +1,2 @@
+nodeSelector:
+  tier: control-plane
