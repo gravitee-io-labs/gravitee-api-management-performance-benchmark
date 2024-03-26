@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: upstream
+spec:
+  selector:
+    matchLabels:
+      app: upstream
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: upstream
+    spec:
+      # nodeSelector:
+      #   tier: dummy-upstream-api-service
+      containers:
+        - name: upstream
+          image: mangomm/go-bench-suite:latest
+          command: ["./go-bench-suite", "upstream"]
