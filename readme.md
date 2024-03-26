@@ -5,18 +5,17 @@
 Run performance tests for Gravitee.io API Management with [K6](https://github.com/grafana/k6), [Prometheus](https://github.com/prometheus/prometheus) and [Grafana](https://github.com/grafana/grafana) on Kubernetes.
 
 Table of content :
-- [G.io API Management Performance Tests](#gio-api-management-performance-tests)
-  - [How we did it and our results](#how-we-did-it-and-our-results)
-  - [Do the tests yourself](#do-the-tests-yourself)
-    - [Setup](#setup)
-      - [\[Optional, not recommended\] Create a local kubernetes cluster with kind](#optional-not-recommended-create-a-local-kubernetes-cluster-with-kind)
-      - [Install Gravitee.io API Management](#install-graviteeio-api-management)
-      - [Install Gravitee.io Kubenertes Operator (GKO)](#install-graviteeio-kubenertes-operator-gko)
-      - [Install K6 Operator](#install-k6-operator)
-      - [Install Prometheus](#install-prometheus)
-      - [Install Grafana](#install-grafana)
-    - [Execute load testings scenarios](#execute-load-testings-scenarios)
-    - [Uninstall](#uninstall)
+- [How we did it and our results](#how-we-did-it-and-our-results)
+- [Do the tests yourself](#do-the-tests-yourself)
+  - [Setup](#setup)
+    - [\[Optional, not recommended\] Create a local kubernetes cluster with kind](#optional-not-recommended-create-a-local-kubernetes-cluster-with-kind)
+    - [Install Gravitee.io API Management](#install-graviteeio-api-management)
+    - [Install Gravitee.io Kubenertes Operator (GKO)](#install-graviteeio-kubenertes-operator-gko)
+    - [Install K6 Operator](#install-k6-operator)
+    - [Install Prometheus](#install-prometheus)
+    - [Install Grafana](#install-grafana)
+  - [Execute load testings scenarios](#execute-load-testings-scenarios)
+  - [Uninstall](#uninstall)
 
 ---
 ## How we did it and our results
@@ -120,7 +119,7 @@ We will also use the Gravitee.io Kubernetes Operator (GKO) to deploy the APIs us
 
     Customise the installation by providing the `values.yaml` file :
 
-    
+    https://github.com/gravitee-io-labs/gravitee-api-management-performance-benchmark/blob/10ce3e25fc3d8ea1c5701e2c793ebb2c6e67a05c/k6/values.yaml#L1-L2
 
     ```sh
     helm install k6-operator -f k6/values.yaml grafana/k6-operator
@@ -139,7 +138,7 @@ We will also use the Gravitee.io Kubernetes Operator (GKO) to deploy the APIs us
 
     Customise the installation by providing the `values.yaml` file :
 
-    https://github.com/gravitee-io-labs/gravitee-api-management-performance-benchmark/blob/80aeedb180b0d0d02b3533cf7a426eb9ad1d5ddf/prometheus/values.yaml#L1-L4
+    https://github.com/gravitee-io-labs/gravitee-api-management-performance-benchmark/blob/10ce3e25fc3d8ea1c5701e2c793ebb2c6e67a05c/prometheus/values.yaml#L1-L10
 
     ```sh
     helm install prometheus -f prometheus/values.yaml bitnami/kube-prometheus --create-namespace --namespace prometheus
