@@ -2,3 +2,9 @@ prometheus:
   scrapeInterval: "30s"
   evaluationInterval: "30s"
   enableRemoteWriteReceiver: true
+server:
+  nodeSelector:
+    tier: control-plane
+alertmanager:
+  nodeSelector:
+    tier: control-plane
