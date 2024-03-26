@@ -20,8 +20,10 @@ spec:
               description: Mock
               configuration:
                 status: '200'
-                headers: []
-                content: Hello World  
+                headers: 
+                  - name: "Content-Type"
+                    value: "text/plain"
+                content: Hello  
   proxy:
     virtual_hosts:
       - path: "/mock"
