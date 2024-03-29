@@ -1,20 +1,20 @@
 apiVersion: gravitee.io/v1alpha1
 kind: ApiDefinition
 metadata:
-  name: echo-v1
+  name: passthrough-v1
 spec:
-  name: "Echo"
+  name: "Passthrough"
   version: "1.0"
-  description: "Echo API"
+  description: "Passthrough API"
   plans:
     - name: "Open"
       description: "Open Keyless Plan"
       security: "KEY_LESS"
   proxy:
     virtual_hosts:
-      - path: "/echo"
+      - path: "/passthrough"
     groups:
       - endpoints:
           - name: "Default"
-            target: "https://api.gravitee.io/echo"
+            target: "http://upstream.dummy-upstream-api-service.svc.cluster.local:8000"
   local: true

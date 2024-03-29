@@ -3,7 +3,7 @@ kind: TestRun
 metadata:
   name: apim-0-passthrough
 spec:
-  parallelism: 1
+  parallelism: 10
   # separate: true
   script:
     configMap:
@@ -18,3 +18,7 @@ spec:
         value: http://prometheus-kube-prometheus-prometheus.prometheus.svc.cluster.local:9090/api/v1/write
       - name: K6_PROMETHEUS_RW_TREND_STATS
         value: "p(95),p(99),min,max"
+      - name: K6_PROMETHEUS_RW_PUSH_INTERVAL
+        value: "5s"
+      # - name: K6_PROMETHEUS_RW_STALE_MARKERS
+      #   value: "true"
