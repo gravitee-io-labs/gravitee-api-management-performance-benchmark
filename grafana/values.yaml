@@ -1,5 +1,6 @@
-nodeSelector:
-  tier: control-plane
+grafana:
+  nodeSelector:
+    tier: control-plane
 admin:
   user: "admin"
   password: "admin"
