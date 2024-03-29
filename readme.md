@@ -5,23 +5,44 @@
 Run performance tests for Gravitee.io API Management with [K6](https://github.com/grafana/k6), [Prometheus](https://github.com/prometheus/prometheus) and [Grafana](https://github.com/grafana/grafana) on Kubernetes.
 
 Table of content :
-- [How we did it and our results](#how-we-did-it-and-our-results)
-- [Do the tests yourself](#do-the-tests-yourself)
-  - [Setup](#setup)
-    - [\[Optional, not recommended\] Create a local kubernetes cluster with kind](#optional-not-recommended-create-a-local-kubernetes-cluster-with-kind)
-    - [Install Gravitee.io API Management](#install-graviteeio-api-management)
-    - [Install Gravitee.io Kubenertes Operator (GKO)](#install-graviteeio-kubenertes-operator-gko)
-    - [Install K6 Operator](#install-k6-operator)
-    - [Install Prometheus](#install-prometheus)
-    - [Install Grafana](#install-grafana)
-  - [Execute load testings scenarios](#execute-load-testings-scenarios)
-  - [Uninstall](#uninstall)
+- [G.io API Management Performance Tests](#gio-api-management-performance-tests)
+  - [How we did it and our results](#how-we-did-it-and-our-results)
+    - [Azure AKS](#azure-aks)
+  - [Do the tests yourself](#do-the-tests-yourself)
+    - [Setup](#setup)
+      - [\[Optional, not recommended\] Create a local kubernetes cluster with kind](#optional-not-recommended-create-a-local-kubernetes-cluster-with-kind)
+      - [Install Gravitee.io API Management](#install-graviteeio-api-management)
+      - [\[Optionnel\]Install Gravitee.io Kubenertes Operator (GKO)](#optionnelinstall-graviteeio-kubenertes-operator-gko)
+      - [Install K6 Operator](#install-k6-operator)
+      - [Install the upstream API service](#install-the-upstream-api-service)
+      - [Install Prometheus](#install-prometheus)
+      - [Install Grafana](#install-grafana)
+    - [Execute load testings scenarios](#execute-load-testings-scenarios)
+    - [Uninstall](#uninstall)
 
 ---
 ## How we did it and our results
 
+### Azure AKS
+
+1. Azure `Standard_F4s_v2` (4 vCPUs / 8 GB Memory)
+
+1 kubernetes node of type `Standard_F4s_v2` dedicated to 1 instance of gateway.
+
+| Test scenario                                                |    RPS    | P95 latency | Graph                                                        |
+| ------------------------------------------------------------ | :-------: | :---------: | ------------------------------------------------------------ |
+| [Testing the dummy upstream service directly](scenarios/dummy-upstream/test.js) - 30k RPS<br />1. 200 RPS during 10 seconds<br />2. Ramp up to 30k RPS over 3 minutess | 29.8k RPS |   366 μs    | ![backend-only-30k-rps](assets/images/grafana/backend-only-30k-rps.png) |
+| [Passthrough, no policy applied](scenarios/0-passthrough/test.js) - 10k RPS<br />1. 200 RPS during 10 seconds<br />2. Ramp up to 10k RPS over 3 minutes<br />3. Maintain 10k RPS over 30 seconds<br />4. Ramp down to 200 RPS over 30 seconds | 11.1k RPS |   1.31 ms   | ![backend-only-30k-rps](assets/images/grafana/passthrough-10k-rps.png) |
+| [Passthrough, no policy applied](scenarios/0-passthrough/test.js) - 20k RPS<br />1. 200 RPS during 10 seconds<br />2. Ramp up to 20k RPS over 3 minutes<br />3. Maintain 20k RPS over 30 seconds<br />4. Ramp down to 200 RPS over 30 seconds | 20.2k RPS |   30.5 ms   | ![backend-only-30k-rps](assets/images/grafana/passthrough-20k-rps.png) |
+| [API key check to authenticate an application - 10k RPS](scenarios/2-api-key/test.js)<br />1. 200 RPS during 10 seconds<br />2. Ramp up to 10k RPS over 3 minutes<br />3. Maintain 10k RPS over 30 seconds<br />4. Ramp down to 200 RPS over 30 seconds | 10.3k RPS |   61.1 ms   | ![backend-only-30k-rps](assets/images/grafana/apikey-10k-rps.png) |
+|                                                              |           |             |                                                              |
+|                                                              |           |             |                                                              |
+
+
+
+
 > [!NOTE]
-> Comming soon
+> Comming soon, more scenarios and tests running in AWS EKS and GCP GKE.
 
 ---
 ## Do the tests yourself
@@ -84,7 +105,7 @@ Use the Helm Chart to install Gravitee.io API Management on kubernetes.
     https://github.com/gravitee-io-labs/gravitee-api-management-performance-benchmark/blob/80aeedb180b0d0d02b3533cf7a426eb9ad1d5ddf/gio-apim/values.yaml#L1-L31
 
     ```sh
-    helm install apim -f gio-apim/values.yaml graviteeio/apim --create-namespace --namespace gio-apim
+    helm install apim -f gio-apim/4CPU-8GB/values.yaml graviteeio/apim --create-namespace --namespace gio-apim
     ```
 
     Watch all containers come up
@@ -93,7 +114,7 @@ Use the Helm Chart to install Gravitee.io API Management on kubernetes.
     kubectl get pods --namespace=gio-apim -l app.kubernetes.io/instance=apim -o wide -w
     ```
 
-#### Install Gravitee.io Kubenertes Operator (GKO)
+#### [Optionnel]Install Gravitee.io Kubenertes Operator (GKO)
 
 We will also use the Gravitee.io Kubernetes Operator (GKO) to deploy the APIs used during the performance test.
 
@@ -123,6 +144,20 @@ We will also use the Gravitee.io Kubernetes Operator (GKO) to deploy the APIs us
 
     ```sh
     helm install k6-operator -f k6/values.yaml grafana/k6-operator
+    ```
+
+#### Install the upstream API service
+
+1. Deploy the `go-bench-suite` service
+
+    Create a dedicated namespace to execute the dummy upstream API service
+
+    ```sh
+    kubectl create ns dummy-upstream-api-service
+    ```
+
+    ```sh
+    kubectl apply -f go-bench-suite --namespace=dummy-upstream-api-service
     ```
 
 #### Install Prometheus
@@ -168,10 +203,21 @@ We will also use the Gravitee.io Kubernetes Operator (GKO) to deploy the APIs us
 
 1. Deploy the API
 
+    > [!WARNING]
+    > In its current version, the CRDs that come with the Kubernetes operator don't allow you to manage API plans and subscriptions.
+    > For simple tests that don't require plans and subscriptions, the operator is sufficient and can deploy APIs that contain policies.
+    > For more advanced cases, such as API subscriptions protected by API key or JWT plans, you'll need to use the Management API.
+
+    - Using the Gravitee.io Kubenertes Operator (GKO)
+
     ```sh
-    kubectl apply -f scenarios/0-passthrough/apim-echo-v1.yaml --namespace=gio-apim
+    kubectl apply -f scenarios/0-passthrough/api-passthrough-v1.yaml --namespace=gio-apim
     kubectl apply -f scenarios/1-mock/apim-mock-v1.yaml --namespace=gio-apim
     ```
+
+    - Using the Management API
+    
+    To do this, you can use [the Postman collection provided](scenarios/G.io APIm Perf Tests.postman_collection.json) (running the collection or the folders it contains automates these tasks).
 
 2. Deploy test scripts and execute scenario
 
@@ -184,27 +230,20 @@ We will also use the Gravitee.io Kubernetes Operator (GKO) to deploy the APIs us
     Deploy the k6 test script to a configmap
 
     ```sh
-    kubectl create configmap 0-passthrough --from-file scenarios/0-passthrough/test.js -n k6-perf-tests
-
-    kubectl create configmap 1-mock --from-file scenarios/1-mock/test.js -n k6-perf-tests
+    kubectl create configmap your-test-name --from-file scenarios/your-test-folder/your-test-script.js -n k6-perf-tests
     ```
 
     Deploy the k6 Test Run ressource, this will trigger the k6 operator and create a job running k6 runner(s).
 
     ```sh
-    kubectl apply -f scenarios/0-passthrough/k6-testrun.yaml -n k6-perf-tests
-
-    kubectl apply -f scenarios/1-mock/k6-testrun.yaml -n k6-perf-tests
+    kubectl apply -f scenarios/your-test-folder/your-k6-testrun.yaml -n k6-perf-tests
     ```
 
     At the end of the load testings scenario delete both ressources.
 
     ```sh
-    kubectl delete configmap 0-passthrough -n k6-perf-tests && \
-    kubectl delete -f scenarios/0-passthrough/k6-testrun.yaml -n k6-perf-tests
-
-    kubectl delete configmap 1-mock -n k6-perf-tests && \
-    kubectl delete -f scenarios/1-mock/k6-testrun.yaml -n k6-perf-tests
+    kubectl delete configmap your-test-name -n k6-perf-tests && \
+    kubectl delete -f scenarios/your-test-folder/your-k6-testrun.yaml -n k6-perf-tests
     ```
 
 ### Uninstall

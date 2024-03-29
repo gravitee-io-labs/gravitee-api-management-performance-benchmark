@@ -1,0 +1,475 @@
+{
+	"info": {
+		"_postman_id": "b4ec65d7-6765-48ef-9489-276ac4c25daf",
+		"name": "G.io APIm Perf Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18442506"
+	},
+	"item": [
+		{
+			"name": "API Key",
+			"item": [
+				{
+					"name": "0 - Create the API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.collectionVariables.set(\"api-id\", jsonData.id);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"connection": true,
+							"accept-encoding": true,
+							"accept": true,
+							"user-agent": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"api\": {\n        \"definitionVersion\": \"V4\",\n        \"name\": \"API key\",\n        \"description\": \"API key test API\",\n        \"visibility\": \"PRIVATE\",\n        \"type\": \"PROXY\",\n        \"listeners\": [\n            {\n                \"type\": \"HTTP\",\n                \"paths\": [\n                    {\n                        \"path\": \"/apikey/\"\n                    }\n                ],\n                \"entrypoints\": [\n                    {\n                        \"type\": \"http-proxy\",\n                        \"qos\": \"AUTO\"\n                    }\n                ]\n            }\n        ],\n        \"endpointGroups\": [\n            {\n                \"name\": \"Default HTTP proxy group\",\n                \"type\": \"http-proxy\",\n                \"loadBalancer\": {\n                    \"type\": \"ROUND_ROBIN\"\n                },\n                \"sharedConfiguration\": {\n                    \"proxy\": {\n                        \"useSystemProxy\": false,\n                        \"enabled\": false\n                    },\n                    \"http\": {\n                        \"keepAlive\": true,\n                        \"followRedirects\": false,\n                        \"readTimeout\": 10000,\n                        \"idleTimeout\": 60000,\n                        \"connectTimeout\": 3000,\n                        \"useCompression\": true,\n                        \"maxConcurrentConnections\": 1000,\n                        \"version\": \"HTTP_1_1\",\n                        \"pipelining\": false\n                    }\n                },\n                \"endpoints\": [\n                    {\n                        \"name\": \"Default HTTP proxy\",\n                        \"type\": \"http-proxy\",\n                        \"weight\": 1,\n                        \"inheritConfiguration\": true,\n                        \"configuration\": {\n                            \"target\": \"http://upstream.dummy-upstream-api-service.svc.cluster.local:8000\"\n                        },\n                        \"secondary\": false\n                    }\n                ]\n            }\n        ],\n        \"analytics\": {\n            \"enabled\": false\n        },\n        \"flowExecution\": {\n            \"mode\": \"DEFAULT\",\n            \"matchRequired\": false\n        }\n    },\n    \"plans\": [\n        {\n            \"definitionVersion\": \"V4\",\n            \"name\": \"API key Plan\",\n            \"description\": \"API key Plan\",\n            \"security\": {\n                \"type\": \"API_KEY\",\n                \"configuration\": {}\n            },\n            \"flows\": [],\n            \"status\": \"PUBLISHED\",\n            \"validation\": \"AUTO\"\n        }\n    ],\n    \"members\": [],\n    \"metadata\": [],\n    \"pages\": [],\n    \"apiMedia\": []\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{mapi-uri}}/management/v2/organizations/DEFAULT/environments/DEFAULT/apis/_import/definition",
+							"host": [
+								"{{mapi-uri}}"
+							],
+							"path": [
+								"management",
+								"v2",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"apis",
+								"_import",
+								"definition"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "1 - Start the API",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"connection": true,
+							"accept": true,
+							"accept-encoding": true,
+							"user-agent": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{mapi-uri}}/management/v2/organizations/DEFAULT/environments/DEFAULT/apis/{{api-id}}/_start",
+							"host": [
+								"{{mapi-uri}}"
+							],
+							"path": [
+								"management",
+								"v2",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"apis",
+								"{{api-id}}",
+								"_start"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2 - Get the Plan ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.collectionVariables.set(\"plan-id\", jsonData.data[0].id);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{mapi-uri}}/management/v2/organizations/DEFAULT/environments/DEFAULT/apis/{{api-id}}/plans",
+							"host": [
+								"{{mapi-uri}}"
+							],
+							"path": [
+								"management",
+								"v2",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"apis",
+								"{{api-id}}",
+								"plans"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3 - Create the App",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.collectionVariables.set(\"app-id\", jsonData.id);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"user-agent": true,
+							"accept": true,
+							"accept-encoding": true,
+							"connection": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Sample App\",\n    \"description\": \"Sample App used for performance tests\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{mapi-uri}}/management/organizations/DEFAULT/environments/DEFAULT/applications/",
+							"host": [
+								"{{mapi-uri}}"
+							],
+							"path": [
+								"management",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"applications",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "4 - Subscribe to the API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.collectionVariables.set(\"subscription-id\", jsonData.id);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"connection": true,
+							"accept-encoding": true,
+							"accept": true,
+							"user-agent": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"planId\": \"{{plan-id}}\",\n    \"applicationId\": \"{{app-id}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{mapi-uri}}/management/v2/organizations/DEFAULT/environments/DEFAULT/apis/{{api-id}}/subscriptions",
+							"host": [
+								"{{mapi-uri}}"
+							],
+							"path": [
+								"management",
+								"v2",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"apis",
+								"{{api-id}}",
+								"subscriptions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "5 - Get the API key",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.collectionVariables.set(\"api-key\", jsonData.data[0].key);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"connection": true,
+							"accept-encoding": true,
+							"accept": true,
+							"user-agent": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{mapi-uri}}/management/v2/organizations/DEFAULT/environments/DEFAULT/apis/{{api-id}}/subscriptions/{{subscription-id}}/api-keys",
+							"host": [
+								"{{mapi-uri}}"
+							],
+							"path": [
+								"management",
+								"v2",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"apis",
+								"{{api-id}}",
+								"subscriptions",
+								"{{subscription-id}}",
+								"api-keys"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cleanup",
+			"item": [
+				{
+					"name": "0 - Stop the API Copy",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"connection": true,
+							"accept": true,
+							"accept-encoding": true,
+							"user-agent": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{mapi-uri}}/management/v2/organizations/DEFAULT/environments/DEFAULT/apis/{{api-id}}/_stop",
+							"host": [
+								"{{mapi-uri}}"
+							],
+							"path": [
+								"management",
+								"v2",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"apis",
+								"{{api-id}}",
+								"_stop"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "1 - Close Plan",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"user-agent": true,
+							"accept": true,
+							"accept-encoding": true,
+							"connection": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{mapi-uri}}/management/v2/organizations/DEFAULT/environments/DEFAULT/apis/{{api-id}}/plans/{{plan-id}}/_close",
+							"host": [
+								"{{mapi-uri}}"
+							],
+							"path": [
+								"management",
+								"v2",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"apis",
+								"{{api-id}}",
+								"plans",
+								"{{plan-id}}",
+								"_close"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2 - Delete the API",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"user-agent": true,
+							"accept": true,
+							"accept-encoding": true,
+							"connection": true
+						}
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{mapi-uri}}/management/v2/organizations/DEFAULT/environments/DEFAULT/apis/{{api-id}}",
+							"host": [
+								"{{mapi-uri}}"
+							],
+							"path": [
+								"management",
+								"v2",
+								"organizations",
+								"DEFAULT",
+								"environments",
+								"DEFAULT",
+								"apis",
+								"{{api-id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "admin",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "admin",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "mapi-uri",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "api-id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "plan-id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "app-id",
+			"value": ""
+		},
+		{
+			"key": "subscription-id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "api-key",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "jwt",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
