@@ -1,44 +1,67 @@
-# As we only need the Gateway for performance testing, we run it in dbless mode.
+# MongoDB Database to store the configuration
+# Skip if you plan to use only the Gravitee.io Kubernetes Operator
+mongodb:
+  enabled: true
+  architecture: standalone
+  nodeSelector:
+    tier: control-plane
+
+mongo:
+  uri: mongodb://graviteeio-apim-mongodb-replicaset.gio-apim.svc.cluster.local:27017/gravitee
+
+# Gravitee.io API Management Gateway
 gateway:
   image:
     repository: graviteeio/apim-gateway
     tag: 4.2.4
-    pullPolicy: Always
+  autoscaling:
+    enabled: false
   replicaCount: 1
   deployment:
     nodeSelector:
       tier: gio-apim-gateway
-  autoscaling:
-    enabled: false
   resources:
     limits:
       cpu: 4
-      memory: 2048Mi
+      memory: 8Gi
     requests:
-      cpu: 2
-      memory: 512Mi
+      cpu: 3.5
+      memory: 4Gi
   env:
     - name: GIO_MIN_MEM
-      value: 512m
+      value: 1g
     - name: GIO_MAX_MEM
-      value: 2048m
+      value: 8g
   ingress:
-    enabled: true
-    hosts:
-      - localhost
-  services:
-    sync:
-      kubernetes:
-        enabled: true
-  dbLess: true
+    enabled: false
+  # DB-LESS mode if you plan to use only the Gravitee.io Kubernetes Operator
+  # services:
+  #   sync:
+  #     kubernetes:
+  #       enabled: true
+  # dbLess: true
   reporters:
     elasticsearch:
       enabled: false
 
-# Disable unsed components
-
+# Gravitee.io API Management API
+# Skip if you plan to use only the Gravitee.io Kubernetes Operator
 api:
-  enabled: false
+  image:
+    repository: graviteeio/apim-management-api
+    tag: 4.2.4
+  autoscaling:
+    enabled: false
+  replicaCount: 1
+  deployment:
+    nodeSelector:
+      tier: control-plane
+  analytics:
+    type: none
+  ingress:
+    enabled: false
+
+# Disable unnecessary components
 
 portal:
   enabled: false
