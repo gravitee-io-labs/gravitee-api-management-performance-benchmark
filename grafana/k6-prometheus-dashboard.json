@@ -69,20 +69,7 @@
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
   "id": null,
-  "links": [
-    {
-      "asDropdown": false,
-      "icon": "external link",
-      "includeVars": false,
-      "keepTime": false,
-      "tags": [],
-      "targetBlank": true,
-      "title": "Grafana k6 OSS Docs: Prometheus Remote Write",
-      "tooltip": "Open docs in a new tab",
-      "type": "link",
-      "url": "https://k6.io/docs/results-output/real-time/prometheus-remote-write/"
-    }
-  ],
+  "links": [],
   "liveNow": false,
   "panels": [
     {
@@ -508,7 +495,9 @@
         "justifyMode": "auto",
         "orientation": "auto",
         "reduceOptions": {
-          "calcs": [],
+          "calcs": [
+            "max"
+          ],
           "fields": "",
           "values": false
         },
@@ -570,7 +559,9 @@
         "justifyMode": "auto",
         "orientation": "auto",
         "reduceOptions": {
-          "calcs": [],
+          "calcs": [
+            "mean"
+          ],
           "fields": "",
           "values": false
         },
@@ -2060,7 +2051,7 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "k6 Prometheus",
+  "title": "Gravitee k6 Prometheus",
   "uid": "ccbb2351-2ae2-462f-ae0e-f2c893ad1028",
   "version": 1,
   "weekStart": "",
