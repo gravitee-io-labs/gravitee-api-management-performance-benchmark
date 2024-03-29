@@ -1,6 +1,6 @@
 prometheus:
-  scrapeInterval: "30s"
-  evaluationInterval: "30s"
+  # scrapeInterval: "15s"
+  # evaluationInterval: "30s"
   enableRemoteWriteReceiver: true
 server:
   nodeSelector:
