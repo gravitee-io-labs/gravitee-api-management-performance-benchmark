@@ -2,7 +2,7 @@ import http from 'k6/http';
 
 export const options = {
   scenarios: {
-    "2000rps-30s": {
+    "mock": {
       executor: 'constant-arrival-rate',
       duration: '30s',
       preAllocatedVUs: 50,
