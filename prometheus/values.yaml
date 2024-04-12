@@ -1,7 +1,29 @@
 prometheus:
-  # scrapeInterval: "15s"
-  # evaluationInterval: "30s"
+  scrapeInterval: "1s"
+  evaluationInterval: "1s"
   enableRemoteWriteReceiver: true
+  additionalScrapeConfigs:
+    enabled: true
+    type: internal
+    internal: 
+      jobList: 
+        - job_name: prometheus
+          static_configs:
+            - targets: ['prometheus-kube-prometheus-prometheus.prometheus.svc.cluster.local:9090']
+        - job_name: gio_gw
+          scrape_interval: '1s'
+          basic_auth:
+            username: 'admin'
+            password: 'adminadmin'
+          metrics_path: '/_node/metrics/prometheus'
+          static_configs:
+            - targets: ['apim-gateway.gio-apim.svc.cluster.local:92']
+          metric_relabel_configs:
+            - source_labels: [ __name__ ]
+              target_label: __name__
+              regex: '(.*)'
+              action: replace
+              replacement: gio_gw_${1}
 server:
   nodeSelector:
     tier: control-plane
