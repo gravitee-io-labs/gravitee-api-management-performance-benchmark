@@ -1,0 +1,72 @@
+{
+    "name": "Passthrough",
+    "version": "1.0",
+    "execution_mode": "v3",
+    "description": "Passthrough test API",
+    "visibility": "PRIVATE",
+    "flows": [],
+    "gravitee": "2.0.0",
+    "flow_mode": "DEFAULT",
+    "resources": [],
+    "properties": [],
+    "plans": [
+        {
+            "name": "Keyless",
+            "description": "Keyless",
+            "validation": "AUTO",
+            "security": "KEY_LESS",
+            "type": "API",
+            "status": "PUBLISHED",
+            "order": 0,
+            "characteristics": [],
+            "tags": [],
+            "paths": {},
+            "comment_required": false,
+            "flows": []
+        }
+    ],
+    "path_mappings": [],
+    "proxy": {
+        "virtual_hosts": [
+            {
+                "path": "/passthrough/"
+            }
+        ],
+        "strip_context_path": false,
+        "preserve_host": false,
+        "groups": [
+            {
+                "name": "default-group",
+                "endpoints": [
+                    {
+                        "name": "default",
+                        "target": "http://upstream.dummy-upstream-api-service.svc.cluster.local:8000",
+                        "weight": 1,
+                        "backup": false,
+                        "status": "UP",
+                        "type": "http",
+                        "inherit": true,
+                        "proxy": null,
+                        "http": null,
+                        "ssl": null
+                    }
+                ],
+                "load_balancing": {
+                    "type": "ROUND_ROBIN"
+                },
+                "http": {
+                    "connectTimeout": 5000,
+                    "idleTimeout": 60000,
+                    "keepAliveTimeout": 30000,
+                    "keepAlive": true,
+                    "readTimeout": 10000,
+                    "pipelining": false,
+                    "maxConcurrentConnections": 100,
+                    "useCompression": true,
+                    "followRedirects": false
+                }
+            }
+        ]
+    },
+    "response_templates": {}
+}

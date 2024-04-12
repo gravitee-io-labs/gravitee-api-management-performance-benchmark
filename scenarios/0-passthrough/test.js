@@ -12,14 +12,13 @@ export const options = {
     },
     "passthrough": {
       executor: 'ramping-arrival-rate',
-      startTime: '50s', // 10s to 20s after warm-up
+      startTime: '40s', // 10s after warm-up
       gracefulStop: '10s',
-      preAllocatedVUs: 20000,
-      maxVUs: 50000,
+      preAllocatedVUs: 200,
+      maxVUs: 500,
       startRate: 200,
       timeUnit: '1s',
       stages: [
-        { target: 200, duration: '10s' },
         { target: 25000, duration: '3m' },
         { target: 25000, duration: '30s' },
         { target: 200, duration: '30s' }

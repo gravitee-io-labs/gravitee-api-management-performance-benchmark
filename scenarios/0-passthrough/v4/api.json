@@ -1,0 +1,89 @@
+{
+    "api": {
+        "definitionVersion": "V4",
+        "name": "Passthrough",
+        "description": "Passthrough test API",
+        "visibility": "PRIVATE",
+        "apiVersion" : "1.0.0",
+        "type": "PROXY",
+        "listeners": [
+            {
+                "type": "HTTP",
+                "paths": [
+                    {
+                        "path": "/passthrough"
+                    }
+                ],
+                "entrypoints": [
+                    {
+                        "type": "http-proxy",
+                        "qos": "AUTO"
+                    }
+                ]
+            }
+        ],
+        "endpointGroups": [
+            {
+                "name": "Default HTTP proxy group",
+                "type": "http-proxy",
+                "loadBalancer": {
+                    "type": "ROUND_ROBIN"
+                },
+                "sharedConfiguration": {
+                    "proxy": {
+                        "useSystemProxy": false,
+                        "enabled": false
+                    },
+                    "http": {
+                        "keepAlive": true,
+                        "followRedirects": false,
+                        "readTimeout": 10000,
+                        "idleTimeout": 60000,
+                        "connectTimeout": 3000,
+                        "useCompression": true,
+                        "maxConcurrentConnections": 1000,
+                        "version": "HTTP_1_1",
+                        "pipelining": false
+                    }
+                },
+                "endpoints": [
+                    {
+                        "name": "Default HTTP proxy",
+                        "type": "http-proxy",
+                        "weight": 1,
+                        "inheritConfiguration": true,
+                        "configuration": {
+                            "target": "http://upstream.dummy-upstream-api-service.svc.cluster.local:8000"
+                        },
+                        "secondary": false
+                    }
+                ]
+            }
+        ],
+        "analytics": {
+            "enabled": false
+        },
+        "flowExecution": {
+            "mode": "DEFAULT",
+            "matchRequired": false
+        }
+    },
+    "plans": [
+        {
+            "definitionVersion": "V4",
+            "name": "Keyless Plan",
+            "description": "Keyless Plan",
+            "security": {
+                "type": "KEY_LESS",
+                "configuration": {}
+            },
+            "flows": [],
+            "status": "PUBLISHED",
+            "validation": "AUTO"
+        }
+    ],
+    "members": [],
+    "metadata": [],
+    "pages": [],
+    "apiMedia": []
+}
