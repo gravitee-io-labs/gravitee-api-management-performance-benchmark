@@ -5,15 +5,13 @@ export const options = {
     "apikey": {
       executor: 'ramping-arrival-rate',
       gracefulStop: '10s',
-      preAllocatedVUs: 20000,
-      maxVUs: 50000,
+      preAllocatedVUs: 200,
+      maxVUs: 500,
       startRate: 200,
       timeUnit: '1s',
       stages: [
-        { target: 200, duration: '10s' },
-        { target: 20000, duration: '5m' },
-        { target: 20000, duration: '30s' },
-        { target: 200, duration: '30s' }
+        { target: 30000, duration: '2m' },
+        { target: 30000, duration: '30s' }
       ]
     },
   },
@@ -22,7 +20,7 @@ export const options = {
 export default function () {
   const params = {
     headers: {
-      'X-Gravitee-Api-Key': '99095f64-0071-4cc9-b70d-5c0760beafdb',
+      'X-Gravitee-Api-Key': '',
     },
   };
 

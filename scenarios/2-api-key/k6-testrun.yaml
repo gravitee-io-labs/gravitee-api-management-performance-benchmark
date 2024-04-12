@@ -3,7 +3,7 @@ kind: TestRun
 metadata:
   name: apim-2-api-key
 spec:
-  parallelism: 10
+  parallelism: 5
   # separate: true
   script:
     configMap:
