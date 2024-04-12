@@ -12,12 +12,14 @@ Table of content :
     - [Setup](#setup)
       - [\[Optional, not recommended\] Create a local kubernetes cluster with kind](#optional-not-recommended-create-a-local-kubernetes-cluster-with-kind)
       - [Install Gravitee.io API Management](#install-graviteeio-api-management)
-      - [\[Optionnel\]Install Gravitee.io Kubenertes Operator (GKO)](#optionnelinstall-graviteeio-kubenertes-operator-gko)
+      - [\[Optional\] Install Gravitee.io Kubenertes Operator (GKO)](#optional-install-graviteeio-kubenertes-operator-gko)
       - [Install K6 Operator](#install-k6-operator)
       - [Install the upstream API service](#install-the-upstream-api-service)
       - [Install Prometheus](#install-prometheus)
       - [Install Grafana](#install-grafana)
     - [Execute load testings scenarios](#execute-load-testings-scenarios)
+      - [SIMPLE, use the make command](#simple-use-the-make-command)
+      - [Manually](#manually)
     - [Uninstall](#uninstall)
 
 ---
@@ -37,8 +39,6 @@ Table of content :
 | [API key check to authenticate an application - 10k RPS](scenarios/2-api-key/test.js)<br />1. 200 RPS during 10 seconds<br />2. Ramp up to 10k RPS over 3 minutes<br />3. Maintain 10k RPS over 30 seconds<br />4. Ramp down to 200 RPS over 30 seconds | 10.3k RPS |   61.1 ms   | ![backend-only-30k-rps](assets/images/grafana/apikey-10k-rps.png) |
 |                                                              |           |             |                                                              |
 |                                                              |           |             |                                                              |
-
-
 
 
 > [!NOTE]
@@ -108,13 +108,19 @@ Use the Helm Chart to install Gravitee.io API Management on kubernetes.
     helm install apim -f gio-apim/4CPU-8GB/values.yaml graviteeio/apim --create-namespace --namespace gio-apim
     ```
 
+    If you need to upgrade the deployment after any change in the configuration :
+
+    ```sh
+    helm upgrade apim -f gio-apim/4CPU-8GB/values.yaml graviteeio/apim --namespace gio-apim
+    ```
+
     Watch all containers come up
 
     ```sh
     kubectl get pods --namespace=gio-apim -l app.kubernetes.io/instance=apim -o wide -w
     ```
 
-#### [Optionnel]Install Gravitee.io Kubenertes Operator (GKO)
+#### [Optional] Install Gravitee.io Kubenertes Operator (GKO)
 
 We will also use the Gravitee.io Kubernetes Operator (GKO) to deploy the APIs used during the performance test.
 
@@ -179,6 +185,12 @@ We will also use the Gravitee.io Kubernetes Operator (GKO) to deploy the APIs us
     helm install prometheus -f prometheus/values.yaml bitnami/kube-prometheus --create-namespace --namespace prometheus
     ```
 
+    If you need to upgrade the deployment after any change in the configuration :
+
+    ```sh
+    helm upgrade prometheus -f prometheus/values.yaml bitnami/kube-prometheus --namespace prometheus
+    ```
+
 #### Install Grafana
 
 1. Deploy Prometheus datasource and dashboard
@@ -199,16 +211,40 @@ We will also use the Gravitee.io Kubernetes Operator (GKO) to deploy the APIs us
     helm install grafana -f grafana/values.yaml bitnami/grafana --create-namespace --namespace grafana
     ```
 
+    If you need to upgrade the deployment after any change in the configuration :
+
+    ```sh
+    helm upgrade grafana -f grafana/values.yaml bitnami/grafana --namespace grafana
+    ```
+
 ### Execute load testings scenarios
+
+#### SIMPLE, use the make command
+
+```sh
+make run-test TEST-NAME=your-test-name BASE_URL=url-apim-management-api
+```
+
+Example
+
+```sh
+make run-test TEST-NAME=2-api-key BASE_URL=http://localhost:50083
+```
+
+#### Manually
 
 1. Deploy the API
 
-    > [!WARNING]
-    > In its current version, the CRDs that come with the Kubernetes operator don't allow you to manage API plans and subscriptions.
-    > For simple tests that don't require plans and subscriptions, the operator is sufficient and can deploy APIs that contain policies.
-    > For more advanced cases, such as API subscriptions protected by API key or JWT plans, you'll need to use the Management API.
+> [!WARNING]
+> In its current version, the CRDs that come with the Kubernetes operator don't allow you to manage API plans and subscriptions.
+> For simple tests that don't require plans and subscriptions, the operator is sufficient and can deploy APIs that contain policies.
+> For more advanced cases, such as API subscriptions protected by API key or JWT plans, you'll need to use the Management API.
 
     - Using the Gravitee.io Kubenertes Operator (GKO)
+
+    ```sh
+    kubectl create ns k6-perf-tests
+    ```
 
     ```sh
     kubectl apply -f scenarios/0-passthrough/api-passthrough-v1.yaml --namespace=gio-apim
@@ -219,7 +255,13 @@ We will also use the Gravitee.io Kubernetes Operator (GKO) to deploy the APIs us
     
     To do this, you can use [the Postman collection provided](scenarios/G.io APIm Perf Tests.postman_collection.json) (running the collection or the folders it contains automates these tasks).
 
-2. Deploy test scripts and execute scenario
+    If not exposed externally, you can use port-forward to have access to the Management API.
+    
+    ```sh
+    kubectl port-forward service/apim-api 50083:api --namespace=gio-apim
+    ```
+
+1. Deploy test scripts and execute scenario
 
     Create a dedicated namespace to execute the performance tests
 
