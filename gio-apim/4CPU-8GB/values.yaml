@@ -13,7 +13,7 @@ mongo:
 gateway:
   image:
     repository: graviteeio/apim-gateway
-    tag: 4.2.4
+    tag: 4.3.2
   autoscaling:
     enabled: false
   replicaCount: 1
@@ -23,15 +23,32 @@ gateway:
   resources:
     limits:
       cpu: 4
-      memory: 8Gi
+      memory: 4Gi
     requests:
       cpu: 3.5
       memory: 4Gi
   env:
     - name: GIO_MIN_MEM
-      value: 1g
+      value: 512m
     - name: GIO_MAX_MEM
-      value: 8g
+      value: 512m
+    - name: JAVA_OPTS
+      value: "-XX:MaxMetaspaceSize=256m -XX:CompressedClassSpaceSize=48m -XX:ReservedCodeCacheSize=32m -XX:+UseStringDeduplication -XX:MaxTenuringThreshold=1 -XX:+ParallelRefProcEnabled -XX:InitiatingHeapOccupancyPercent=25 -Xss256k"
+    - name: gravitee_http_instances
+      value: "6"
+  services:
+    core:
+      http:
+        port: 18082
+      service:
+        enabled: true
+        type: ClusterIP
+        externalPort: 92
+        appProtocol: http
+    metrics:
+      enabled: true
+      prometheus:
+        enabled: true
   ingress:
     enabled: false
   # DB-LESS mode if you plan to use only the Gravitee.io Kubernetes Operator
@@ -49,7 +66,7 @@ gateway:
 api:
   image:
     repository: graviteeio/apim-management-api
-    tag: 4.2.4
+    tag: 4.3.2
   autoscaling:
     enabled: false
   replicaCount: 1
