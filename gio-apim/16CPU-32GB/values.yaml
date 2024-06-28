@@ -31,10 +31,10 @@ gateway:
       enabled: false
   resources:
     limits:
-      cpu: 4
+      cpu: 16
       memory: 4Gi
     requests:
-      cpu: 3550m
+      cpu: 15
       memory: 4Gi
   env:
     - name: GIO_MIN_MEM
@@ -44,7 +44,7 @@ gateway:
     - name: JAVA_OPTS
       value: "-XX:MaxMetaspaceSize=256m -XX:CompressedClassSpaceSize=48m -XX:ReservedCodeCacheSize=32m -XX:+UseStringDeduplication -XX:MaxTenuringThreshold=1 -XX:+ParallelRefProcEnabled -XX:InitiatingHeapOccupancyPercent=25 -Xss256k"
     - name: gravitee_http_instances
-      value: "8"
+      value: "32"
   ratelimit:
     redis:
       host: redis-master.redis.svc.cluster.local
