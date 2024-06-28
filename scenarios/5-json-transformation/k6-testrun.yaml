@@ -1,0 +1,25 @@
+apiVersion: k6.io/v1alpha1
+kind: TestRun
+metadata:
+  name: apim-5-json-transformation
+spec:
+  parallelism: 8
+  # separate: true
+  script:
+    configMap:
+      name: 5-json-transformation
+      file: test.js
+  arguments: --out experimental-prometheus-rw
+  runner:
+    nodeSelector:
+      tier: k6-runner
+    env:
+      - name: K6_PROMETHEUS_RW_SERVER_URL
+        value: http://prometheus-kube-prometheus-prometheus.prometheus.svc.cluster.local:9090/api/v1/write
+      - name: K6_PROMETHEUS_RW_TREND_STATS
+        value: "avg,p(90),p(95),p(99),min,max"
+      - name: K6_PROMETHEUS_RW_PUSH_INTERVAL
+        value: "5s"
+      # - name: K6_PROMETHEUS_RW_STALE_MARKERS
+      #   value: "true"
+
