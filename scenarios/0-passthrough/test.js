@@ -6,7 +6,8 @@ export const options = {
       executor: 'constant-arrival-rate',
       duration: '30s',
       gracefulStop: '10s',
-      preAllocatedVUs: 1000,
+      preAllocatedVUs: 10,
+      maxVUs: 10,
       rate: 200,
       timeUnit: '1s',
     },
@@ -14,13 +15,14 @@ export const options = {
       executor: 'ramping-arrival-rate',
       startTime: '40s', // 10s after warm-up
       gracefulStop: '10s',
-      preAllocatedVUs: 200,
-      maxVUs: 500,
+      preAllocatedVUs: 100,
+      maxVUs: 100,
       startRate: 200,
       timeUnit: '1s',
       stages: [
-        { target: 25000, duration: '3m' },
-        { target: 25000, duration: '30s' },
+        { target: 10000, duration: '2m' }, // Configure your limit here
+        { target: 10000, duration: '10s' }, // Configure your limit here
+        { target: 200, duration: '30s' },
         { target: 200, duration: '30s' }
       ]
     }

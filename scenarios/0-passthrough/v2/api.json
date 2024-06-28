@@ -29,7 +29,7 @@
     "proxy": {
         "virtual_hosts": [
             {
-                "path": "/passthrough/"
+                "path": "/passthrough"
             }
         ],
         "strip_context_path": false,
@@ -60,8 +60,8 @@
                     "keepAliveTimeout": 30000,
                     "keepAlive": true,
                     "readTimeout": 10000,
-                    "pipelining": false,
-                    "maxConcurrentConnections": 100,
+                    "pipelining": true,
+                    "maxConcurrentConnections": 300,
                     "useCompression": true,
                     "followRedirects": false
                 }
