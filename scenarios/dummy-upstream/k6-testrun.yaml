@@ -3,7 +3,7 @@ kind: TestRun
 metadata:
   name: apim-dummy-upstream
 spec:
-  parallelism: 10
+  parallelism: 8
   # separate: true
   script:
     configMap:

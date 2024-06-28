@@ -5,13 +5,14 @@ export const options = {
     "dummy-upstream": {
       executor: 'ramping-arrival-rate',
       gracefulStop: '10s',
-      preAllocatedVUs: 20000,
-      maxVUs: 50000,
+      preAllocatedVUs: 500,
+      maxVUs: 500,
       startRate: 200,
       timeUnit: '1s',
       stages: [
+        { target: 150000, duration: '2m' },
+        { target: 150000, duration: '30s' },
         { target: 200, duration: '10s' },
-        { target: 30000, duration: '3m' }
       ]
     }
   }
