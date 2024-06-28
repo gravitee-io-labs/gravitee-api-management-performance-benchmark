@@ -41,28 +41,28 @@ Table of content :
 
 | Test scenario                  | RPS      | P(95) req duration | P(99) req duration | Graph                                                                                                                  |
 | ------------------------------ |:--------:|:------------------:|:------------------:|:----------------------------------------------------------------------------------------------------------------------:|
-| Passthrough<br/>10 VUs         | 7.1k RPS | 1.04 ms            | 2.17 ms            | ![500m vCPU - 512 Mi mem - Passthrough](assets/images/grafana/APIm 4.3.4 - 500m vCPU - 512 Mi mem - Passthrough.png)   |
-| API key<br/>10 VUs             | 6.6k RPS | 1.07 ms            | 9.55 ms            | ![500m vCPU - 512 Mi mem - API key](assets/images/grafana/APIm 4.3.4 - 500m vCPU - 512 Mi mem - API key.png)           |
-| Rate Limit<br/>10 VUs          | 5.0k RPS | 1.10 ms            | 4.33 ms            | ![500m vCPU - 512 Mi mem - RL](assets/images/grafana/APIm 4.3.4 - 500m vCPU - 512 Mi mem - RL.png)                     |
-| JSON Transformation<br/>10 VUs | 3.5k RPS | 1.31 ms            | 3.59 ms            | ![500m vCPU - 512 Mi mem - JSON Transfo](assets/images/grafana/APIm 4.3.4 - 500m vCPU - 512 Mi mem - JSON Transfo.png) |
+| Passthrough<br/>10 VUs         | 7.1k RPS | 1.04 ms            | 2.17 ms            | ![500m vCPU - 512 Mi mem - Passthrough](assets/images/grafana/APIm%204.3.4%20-%20500m%20vCPU%20-%20512%20Mi%20mem%20-%20Passthrough.png)   |
+| API key<br/>10 VUs             | 6.6k RPS | 1.07 ms            | 9.55 ms            | ![500m vCPU - 512 Mi mem - API key](assets/images/grafana/APIm%204.3.4%20-%20500m%20vCPU%20-%20512%20Mi%20mem%20-%20API%20key.png)           |
+| Rate Limit<br/>10 VUs          | 5.0k RPS | 1.10 ms            | 4.33 ms            | ![500m vCPU - 512 Mi mem - RL](assets/images/grafana/APIm%204.3.4%20-%20500m%20vCPU%20-%20512%20Mi%20mem%20-%20RL.png)                     |
+| JSON Transformation<br/>10 VUs | 3.5k RPS | 1.31 ms            | 3.59 ms            | ![500m vCPU - 512 Mi mem - JSON Transfo](assets/images/grafana/APIm%204.3.4%20-%20500m%20vCPU%20-%20512%20Mi%20mem%20-%20JSON%20Transfo.png) |
 
 #### 2.1.2. 4 vCPU core & 3 Gi memory (Standard_F4s_v2)
 
 | Test scenario                   | RPS       | P(95) req duration | P(99) req duration | Graph                                                                                                        |
 | ------------------------------- |:---------:|:------------------:|:------------------:|:------------------------------------------------------------------------------------------------------------:|
-| Passthrough<br/>100 VUs         | 25.1k RPS | 9.06 ms            | 15.62 ms           | ![4 vCPU - 3 Gi mem - Passthrough](assets/images/grafana/APIm 4.3.4 - 4 vCPU - 3 Gi mem - Passthrough.png)   |
-| API key<br/>150 VUs             | 23.8k RPS | 13.50 ms           | 19.80 ms           | ![4 vCPU - 3 Gi mem - API key](assets/images/grafana/APIm 4.3.4 - 4 vCPU - 3 Gi mem - API key.png)           |
-| Rate Limit<br/>150 VUs          | 18.6k RPS | 13.47 ms           | 19.38 ms           | ![4 vCPU - 3 Gi mem - RL](assets/images/grafana/APIm 4.3.4 - 4 vCPU - 3 Gi mem - RL.png)                     |
-| JSON Transformation<br/>150 VUs | 14.1k RPS | 21.85 ms           | 29.99 ms           | ![4 vCPU - 3 Gi mem - JSON Transfo](assets/images/grafana/APIm 4.3.4 - 4 vCPU - 3 Gi mem - JSON Transfo.png) |
+| Passthrough<br/>100 VUs         | 25.1k RPS | 9.06 ms            | 15.62 ms           | ![4 vCPU - 3 Gi mem - Passthrough](assets/images/grafana/APIm%204.3.4%20-%204%20vCPU%20-%203%20Gi%20mem%20-%20Passthrough.png)   |
+| API key<br/>150 VUs             | 23.8k RPS | 13.50 ms           | 19.80 ms           | ![4 vCPU - 3 Gi mem - API key](assets/images/grafana/APIm%204.3.4%20-%204%20vCPU%20-%203%20Gi%20mem%20-%20API%20key.png)           |
+| Rate Limit<br/>150 VUs          | 18.6k RPS | 13.47 ms           | 19.38 ms           | ![4 vCPU - 3 Gi mem - RL](assets/images/grafana/APIm%204.3.4%20-%204%20vCPU%20-%203%20Gi%20mem%20-%20RL.png)                     |
+| JSON Transformation<br/>150 VUs | 14.1k RPS | 21.85 ms           | 29.99 ms           | ![4 vCPU - 3 Gi mem - JSON Transfo](assets/images/grafana/APIm%204.3.4%20-%204%20vCPU%20-%203%20Gi%20mem%20-%20JSON%20Transfo.png) |
 
 #### 2.1.3. 16 vCPU core & 3 Gi memory (Standard_F16s_v2)
 
 | Test scenario                   | RPS       | P(95) req duration | P(99) req duration | Graph                                                                                                          |
 | ------------------------------- |:---------:|:------------------:|:------------------:|:--------------------------------------------------------------------------------------------------------------:|
-| Passthrough<br/>200 VUs         | 88.3k RPS | 9.76 ms            | 8.77 ms            | ![16 vCPU - 3 Gi mem - Passthrough](assets/images/grafana/APIm 4.3.4 - 16 vCPU - 3 Gi mem - Passthrough.png)   |
-| API key<br/>200 VUs             | 80.8k RPS | 3.84 ms            | 9.05 ms            | ![16 vCPU - 3 Gi mem - API key](assets/images/grafana/APIm 4.3.4 - 16 vCPU - 3 Gi mem - API key.png)           |
-| Rate Limit<br/>200 VUs          | 61.8k RPS | 4.42 ms            | 6.55 ms            | ![16 vCPU - 3 Gi mem - RL](assets/images/grafana/APIm 4.3.4 - 16 vCPU - 3 Gi mem - RL.png)                     |
-| JSON Transformation<br/>150 VUs | 50.9k RPS | 4.07 ms            | 8.74 ms            | ![16 vCPU - 3 Gi mem - JSON Transfo](assets/images/grafana/APIm 4.3.4 - 16 vCPU - 3 Gi mem - JSON Transfo.png) |
+| Passthrough<br/>200 VUs         | 88.3k RPS | 9.76 ms            | 8.77 ms            | ![16 vCPU - 3 Gi mem - Passthrough](assets/images/grafana/APIm%204.3.4%20-%2016%20vCPU%20-%203%20Gi%20mem%20-%20Passthrough.png)   |
+| API key<br/>200 VUs             | 80.8k RPS | 3.84 ms            | 9.05 ms            | ![16 vCPU - 3 Gi mem - API key](assets/images/grafana/APIm%204.3.4%20-%2016%20vCPU%20-%203%20Gi%20mem%20-%20API%20key.png)           |
+| Rate Limit<br/>200 VUs          | 61.8k RPS | 4.42 ms            | 6.55 ms            | ![16 vCPU - 3 Gi mem - RL](assets/images/grafana/APIm%204.3.4%20-%2016%20vCPU%20-%203%20Gi%20mem%20-%20RL.png)                     |
+| JSON Transformation<br/>150 VUs | 50.9k RPS | 4.07 ms            | 8.74 ms            | ![16 vCPU - 3 Gi mem - JSON Transfo](assets/images/grafana/APIm%204.3.4%20-%2016%20vCPU%20-%203%20Gi%20mem%20-%20JSON%20Transfo.png) |
 
 > [!NOTE]
 > Coming soon, more scenarios and tests running in AWS EKS and GCP GKE.
