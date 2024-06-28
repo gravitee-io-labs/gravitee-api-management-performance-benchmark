@@ -1,0 +1,13 @@
+architecture: standalone
+auth:
+  enabled: false
+master:
+  resources:
+    limits:
+      cpu: 4
+      memory: 1Gi
+    requests:
+      cpu: 3
+      memory: 1Gi
+  nodeSelector: 
+    tier: control-plane
