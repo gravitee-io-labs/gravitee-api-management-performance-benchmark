@@ -1,0 +1,72 @@
+{
+    "name": "API Key",
+    "version": "1.0",
+    "execution_mode": "v3",
+    "description": "API Key test API",
+    "visibility": "PRIVATE",
+    "flows": [],
+    "gravitee": "2.0.0",
+    "flow_mode": "DEFAULT",
+    "resources": [],
+    "properties": [],
+    "plans": [
+        {
+            "name": "API Key",
+            "description": "API Key Plan",
+            "validation": "AUTO",
+            "security": "API_KEY",
+            "type": "API",
+            "status": "PUBLISHED",
+            "order": 0,
+            "characteristics": [],
+            "tags": [],
+            "paths": {},
+            "comment_required": false,
+            "flows": []
+        }
+    ],
+    "path_mappings": [],
+    "proxy": {
+        "virtual_hosts": [
+            {
+                "path": "/apikey"
+            }
+        ],
+        "strip_context_path": false,
+        "preserve_host": false,
+        "groups": [
+            {
+                "name": "default-group",
+                "endpoints": [
+                    {
+                        "name": "default",
+                        "target": "http://upstream.dummy-upstream-api-service.svc.cluster.local:8000",
+                        "weight": 1,
+                        "backup": false,
+                        "status": "UP",
+                        "type": "http",
+                        "inherit": true,
+                        "proxy": null,
+                        "http": null,
+                        "ssl": null
+                    }
+                ],
+                "load_balancing": {
+                    "type": "ROUND_ROBIN"
+                },
+                "http": {
+                    "connectTimeout": 5000,
+                    "idleTimeout": 60000,
+                    "keepAliveTimeout": 30000,
+                    "keepAlive": true,
+                    "readTimeout": 10000,
+                    "pipelining": true,
+                    "maxConcurrentConnections": 300,
+                    "useCompression": true,
+                    "followRedirects": false
+                }
+            }
+        ]
+    },
+    "response_templates": {}
+}
